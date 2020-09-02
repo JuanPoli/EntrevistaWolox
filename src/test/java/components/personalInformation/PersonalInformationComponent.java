@@ -1,26 +1,23 @@
 package components.personalInformation;
 
-import components.DatePickerComponent;
-import components.SavedInformationModal;
-import components.Select;
+import components.commons.DatePickerComponent;
+import components.commons.SucceedActionModal;
+import components.commons.Select;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import tests.BaseComponent;
+import web.BaseComponent;
 
-import java.util.List;
-
+import static commonoperations.CommonOperations.getInputValue;
 import static commonoperations.CommonOperations.isVisible;
-import static components.personalInformation.PersonalInformationComponent.Genders.FEMALE;
-import static components.personalInformation.PersonalInformationComponent.Genders.MALE;
 
 public class PersonalInformationComponent extends BaseComponent {
 
     @FindBy(className = "file-upload-container")
     private WebElement uploadImageComponentContainer;
 
-    @FindBy(css = "#confirmation-modal > div")
-    private WebElement savedInformationModalContainer;
+    @FindBy(css = "modal-content")
+    private WebElement succeedActionModalContainer;
 
     @FindBy(id = "name")
     private WebElement nameInput;
@@ -40,8 +37,11 @@ public class PersonalInformationComponent extends BaseComponent {
     @FindBy(id = "country")
     private WebElement countrySelectorContainer;
 
-    @FindBy(className = "radio")
-    private List<WebElement> radioButtonsGender;
+    @FindBy(id = "M")
+    private WebElement radioButtonMaleGender;
+
+    @FindBy(id = "F")
+    private WebElement radioButtonFemaleGender;
 
     @FindBy(className = "selector")
     private WebElement CalendarComponentContainer;
@@ -52,10 +52,7 @@ public class PersonalInformationComponent extends BaseComponent {
     @FindBy(id = "save-profile")
     private WebElement saveButton;
 
-
-    public enum Genders {
-        MALE, FEMALE
-    }
+    private int selectedCountryIndex;
 
     public PersonalInformationComponent(WebElement container) {
         super(container);
@@ -82,16 +79,17 @@ public class PersonalInformationComponent extends BaseComponent {
         countrySelector.click();
         Select selector = new Select(countrySelectorContainer);
         selector.selectByValue(country);
+        selectedCountryIndex = selector.getIndexOfSelectedItem();
         return this;
     }
 
     public PersonalInformationComponent selectMaleRadioButton() {
-        radioButtonsGender.get(MALE.ordinal()).click();
+        radioButtonMaleGender.click();
         return this;
     }
 
     public PersonalInformationComponent selectFemaleRadioButton() {
-        radioButtonsGender.get(FEMALE.ordinal()).click();
+        radioButtonFemaleGender.click();
         return this;
     }
 
@@ -99,9 +97,9 @@ public class PersonalInformationComponent extends BaseComponent {
         return new UploadImageComponent(uploadImageComponentContainer);
     }
 
-    public SavedInformationModal clickSaveButton() {
+    public SucceedActionModal clickSaveButton() {
         saveButton.click();
-        return new SavedInformationModal(savedInformationModalContainer);
+        return new SucceedActionModal(succeedActionModalContainer);
     }
 
     public boolean isCancelButtonVisible() {
@@ -111,4 +109,25 @@ public class PersonalInformationComponent extends BaseComponent {
     public boolean isSaveButtonVisible() {
         return saveButton.isDisplayed();
     }
+
+    public String getNameInputText() {
+        return getInputValue(nameInput);
+    }
+
+    public String getLastNameInputText() {
+        return getInputValue(lastNameInput);
+    }
+
+    public String getBirthDateInputText() {
+        return getInputValue(dateOfBirthInput);
+    }
+
+    public String getCountrySelectorText() {
+        return getInputValue(countrySelectorContainer);
+    }
+
+    public String getSelectedCountryIndex() {
+        return String.valueOf(selectedCountryIndex);
+    }
+
 }

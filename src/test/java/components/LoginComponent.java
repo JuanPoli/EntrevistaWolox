@@ -3,7 +3,7 @@ package components;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import pages.HomePage;
-import tests.BaseComponent;
+import web.BaseComponent;
 
 public class LoginComponent extends BaseComponent {
 

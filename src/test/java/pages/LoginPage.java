@@ -3,7 +3,7 @@ package pages;
 import components.LoginComponent;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import tests.BasePage;
+import web.BasePage;
 
 public class LoginPage extends BasePage {
 

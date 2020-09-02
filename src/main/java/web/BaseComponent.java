@@ -1,4 +1,4 @@
-package tests;
+package web;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;

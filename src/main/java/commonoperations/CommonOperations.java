@@ -36,4 +36,8 @@ public class CommonOperations {
         JavascriptExecutor executor = (JavascriptExecutor) getDriver();
         executor.executeScript("arguments[0].click();", element);
     }
+
+    public static String getInputValue(WebElement element) {
+        return element.getAttribute("value");
+    }
 }

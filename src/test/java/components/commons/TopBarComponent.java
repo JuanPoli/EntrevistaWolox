@@ -1,15 +1,15 @@
-package components;
+package components.commons;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import pages.HomePage;
 import pages.LoginPage;
 import pages.PersonalInformationPage;
-import tests.BaseComponent;
+import web.BaseComponent;
 
 import java.util.List;
 
-import static components.TopBarComponent.Options.*;
+import static components.commons.TopBarComponent.Options.*;
 
 public class TopBarComponent extends BaseComponent {
 

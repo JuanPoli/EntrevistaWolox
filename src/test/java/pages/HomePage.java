@@ -1,10 +1,10 @@
 package pages;
 
 import components.OffersComponent;
-import components.TopBarComponent;
+import components.commons.TopBarComponent;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import tests.BasePage;
+import web.BasePage;
 
 public class HomePage extends BasePage {
 

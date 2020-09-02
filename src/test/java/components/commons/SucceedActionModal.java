@@ -1,20 +1,20 @@
-package components;
+package components.commons;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import pages.PersonalInformationPage;
-import tests.BaseComponent;
+import pages.HomePage;
+import web.BaseComponent;
 
 import static commonoperations.CommonOperations.isVisible;
 import static commonoperations.CommonOperations.jsClick;
 import static driver.Drivers.getDriver;
 
-public class SavedInformationModal extends BaseComponent {
+public class SucceedActionModal extends BaseComponent {
 
     private WebElement confirmationMessageText;
     private WebElement crossButton;
 
-    public SavedInformationModal(WebElement container) {
+    public SucceedActionModal(WebElement container) {
         super(container);
         confirmationMessageText = getDriver().findElement(By.className("confirmation-modal-info"));
         crossButton = getDriver().findElement(By.className("close"));
@@ -24,9 +24,9 @@ public class SavedInformationModal extends BaseComponent {
         return isVisible(confirmationMessageText);
     }
 
-    public PersonalInformationPage clickOnCrossButton() {
+    public HomePage clickOnCrossButton() {
         jsClick(crossButton);
-        return new PersonalInformationPage();
+        return new HomePage();
     }
 
     public String getConfirmationMessageText() {

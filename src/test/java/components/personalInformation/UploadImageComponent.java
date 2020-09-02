@@ -2,7 +2,7 @@ package components.personalInformation;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import tests.BaseComponent;
+import web.BaseComponent;
 
 import java.io.File;
 
@@ -13,6 +13,9 @@ public class UploadImageComponent extends BaseComponent {
     @FindBy(css = ".file-upload input")
     private WebElement uploadImageButton;
 
+    @FindBy(className = "file-preview")
+    private WebElement image;
+
     public UploadImageComponent(WebElement container) {
         super(container);
     }
@@ -21,6 +24,10 @@ public class UploadImageComponent extends BaseComponent {
         File file = new File(TEST_PROPERTIES.getImagePath());
         uploadImageButton.sendKeys(file.getAbsolutePath());
         return this;
+    }
+
+    public String getImageName() {
+        return image.getAttribute("src");
     }
 
 }
