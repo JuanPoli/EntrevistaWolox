@@ -1,28 +1,14 @@
 package pages;
 
-import components.OffersComponent;
-import components.commons.TopBarComponent;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import web.BasePage;
+import components.commons.TableComponent;
 
-public class HomePage extends BasePage {
-
-    @FindBy(className = "nav-bar")
-    private WebElement topBarComponentContainer;
-
-    @FindBy(className = "app-table")
-    private WebElement offersTableComponentContainer;
+public class HomePage extends BaseWappiPage {
 
     public HomePage() {
         super();
     }
 
-    public TopBarComponent getTopBarComponent() {
-        return new TopBarComponent(topBarComponentContainer);
-    }
-
-    public OffersComponent getOffersTableComponent() {
-        return new OffersComponent(offersTableComponentContainer);
+    public TableComponent getOffersTableComponent() {
+        return new TableComponent(tableComponentContainer);
     }
 }

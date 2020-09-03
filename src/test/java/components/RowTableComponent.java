@@ -13,14 +13,13 @@ public class RowTableComponent extends BaseComponent {
     @FindBy(tagName = "td")
     private List<WebElement> fieldsList;
 
-    @FindBy(className = "modal-content")
+    @FindBy(id = "confirmation-modal")
     private WebElement modalOrderConfirmationContainer;
 
 
     public enum RowElements {
-        DATE, DESCRIPTION, PRICE, SHIPPING_COST, STORE, ADDRESS, ACTIONS
+        DATE, DESCRIPTION, PRICE, SHIPPING_COST, STORE, ADDRESS, VARIABLE_OPTION
     };
-
     public RowTableComponent(WebElement container) {
         super(container);
     }
@@ -41,16 +40,16 @@ public class RowTableComponent extends BaseComponent {
                 return fieldsList.get(STORE.ordinal()).getText();
             case "address":
                 return fieldsList.get(ADDRESS.ordinal()).getText();
-            case "actions":
-                fieldsList.get(ACTIONS.ordinal()).click();
-                break;
+            case "variable":
+                fieldsList.get(VARIABLE_OPTION.ordinal()).click();
+                return fieldsList.get(VARIABLE_OPTION.ordinal()).getText();
         }
 
         return "";
     }
 
     public ConfirmOrderModal clickRequestButton() {
-        fieldsList.get(ACTIONS.ordinal()).click();
+        fieldsList.get(VARIABLE_OPTION.ordinal()).click();
         return new ConfirmOrderModal(modalOrderConfirmationContainer);
     }
 }

@@ -3,6 +3,7 @@ package components.commons;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pages.HomePage;
+import waits.Waits;
 import web.BaseComponent;
 
 import static commonoperations.CommonOperations.isVisible;
@@ -17,7 +18,8 @@ public class SucceedActionModal extends BaseComponent {
     public SucceedActionModal(WebElement container) {
         super(container);
         confirmationMessageText = getDriver().findElement(By.className("confirmation-modal-info"));
-        crossButton = getDriver().findElement(By.className("close"));
+        crossButton = container.findElement(By.className("close"));
+        Waits.waitForInvisibilityOf(By.className("lds-dual-ring"));
     }
 
     public boolean isConfirmationMessageDisplayed() {
@@ -32,6 +34,5 @@ public class SucceedActionModal extends BaseComponent {
     public String getConfirmationMessageText() {
         return confirmationMessageText.getText();
     }
-
 
 }

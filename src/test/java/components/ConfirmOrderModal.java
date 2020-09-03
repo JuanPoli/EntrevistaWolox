@@ -30,7 +30,7 @@ public class ConfirmOrderModal extends BaseComponent {
         offerInfo = getDriver().findElements(By.className("info"));
         couponNumberInput = getDriver().findElement(By.className("input"));
         confirmOrderButton = getDriver().findElement(By.id("order-confirm"));
-        succeedActionModalContainer = getDriver().findElement(By.className("modal-content"));
+        succeedActionModalContainer = getDriver().findElement(By.id("confirmation-modal"));
     }
 
     public String getTitleLabel() {

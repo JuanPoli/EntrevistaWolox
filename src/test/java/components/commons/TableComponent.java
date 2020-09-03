@@ -1,15 +1,16 @@
-package components;
+package components.commons;
 
+import components.TableBodyComponent;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import web.BaseComponent;
 
-public class OffersComponent extends BaseComponent {
+public class TableComponent extends BaseComponent {
 
     @FindBy(tagName = "tbody")
     private WebElement tableBodyContainer;
 
-    public OffersComponent(WebElement container) {
+    public TableComponent(WebElement container) {
         super(container);
     }
 

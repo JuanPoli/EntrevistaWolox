@@ -16,7 +16,7 @@ public class PersonalInformationComponent extends BaseComponent {
     @FindBy(className = "file-upload-container")
     private WebElement uploadImageComponentContainer;
 
-    @FindBy(css = "modal-content")
+    @FindBy(id = "confirmation-modal")
     private WebElement succeedActionModalContainer;
 
     @FindBy(id = "name")

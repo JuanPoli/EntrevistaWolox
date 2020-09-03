@@ -3,9 +3,8 @@ package pages;
 import components.personalInformation.PersonalInformationComponent;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import web.BasePage;
 
-public class PersonalInformationPage extends BasePage {
+public class PersonalInformationPage extends BaseWappiPage {
 
     @FindBy(className = "profile-form")
     private WebElement personalInformationComponentContainer;

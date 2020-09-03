@@ -1,10 +1,9 @@
 package components.commons;
 
+import components.CouponModalComponent;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import pages.HomePage;
-import pages.LoginPage;
-import pages.PersonalInformationPage;
+import pages.*;
 import web.BaseComponent;
 
 import java.util.List;
@@ -16,6 +15,9 @@ public class TopBarComponent extends BaseComponent {
     @FindBy(className = "nav-bar-item")
     private List<WebElement> topBarOptions;
 
+    @FindBy(id = "coupon-modal")
+    private WebElement couponModalContainer;
+
     public enum Options {
         HOME, COUPONS, MY_ORDERS, PERSONAL_INFORMATION, WELCOME_COUPONS, LOG_OUT
     }
@@ -24,25 +26,25 @@ public class TopBarComponent extends BaseComponent {
         super(container);
     }
 
-    /*public CouponsPage couponsPage() {
+    public CouponsPage couponsPage() {
         topBarOptions.get(COUPONS.ordinal()).click();
         return new CouponsPage();
     }
 
-    public MyOrdersPage myOrdersPage() {
+    public OrdersPage myOrdersPage() {
         topBarOptions.get(MY_ORDERS.ordinal()).click();
-        return new MyOrdersPage();
-    }*/
+        return new OrdersPage();
+    }
 
     public PersonalInformationPage personalInformationPage() {
         topBarOptions.get(PERSONAL_INFORMATION.ordinal()).click();
         return new PersonalInformationPage();
     }
 
-    /*public WelcomeCouponsPage welcomeCouponsPage() {
+    public CouponModalComponent clickObtainWelcomeCoupons() {
         topBarOptions.get(WELCOME_COUPONS.ordinal()).click();
-        return new WelcomeCouponsPage();
-    }*/
+        return new CouponModalComponent(couponModalContainer);
+    }
 
     public LoginPage logout() {
         topBarOptions.get(LOG_OUT.ordinal()).click();
