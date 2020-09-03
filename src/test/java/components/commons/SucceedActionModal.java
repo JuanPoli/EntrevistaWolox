@@ -18,7 +18,7 @@ public class SucceedActionModal extends BaseComponent {
     public SucceedActionModal(WebElement container) {
         super(container);
         confirmationMessageText = getDriver().findElement(By.className("confirmation-modal-info"));
-        crossButton = container.findElement(By.className("close"));
+        crossButton = getDriver().findElement(By.className("close"));
         Waits.waitForInvisibilityOf(By.className("lds-dual-ring"));
     }
 

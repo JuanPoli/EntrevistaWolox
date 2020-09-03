@@ -1,6 +1,6 @@
 package tests;
 
-import components.LoginComponent;
+import components.orders.LoginComponent;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

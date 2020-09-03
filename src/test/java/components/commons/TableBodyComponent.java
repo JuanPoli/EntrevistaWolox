@@ -1,5 +1,6 @@
-package components;
+package components.commons;
 
+import components.orders.RowTableComponent;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import web.BaseComponent;

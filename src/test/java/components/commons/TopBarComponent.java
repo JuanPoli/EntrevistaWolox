@@ -1,6 +1,6 @@
 package components.commons;
 
-import components.CouponModalComponent;
+import components.orders.CouponModalComponent;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import pages.*;

@@ -1,4 +1,4 @@
-package components;
+package components.orders;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

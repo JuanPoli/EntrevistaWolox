@@ -1,9 +1,9 @@
 package tests.woloxtests;
 
-import components.ConfirmOrderModal;
-import components.CouponModalComponent;
-import components.RowTableComponent;
-import components.TableBodyComponent;
+import components.orders.ConfirmOrderModal;
+import components.orders.CouponModalComponent;
+import components.orders.RowTableComponent;
+import components.commons.TableBodyComponent;
 import components.commons.DatePickerComponent;
 import components.commons.SucceedActionModal;
 import components.commons.TableComponent;
@@ -21,6 +21,8 @@ import tests.BaseTest;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.String.valueOf;
 import static org.junit.Assert.*;
 
 public class WoloxTests extends BaseTest {
@@ -40,8 +42,16 @@ public class WoloxTests extends BaseTest {
     private final static String SHIPPING_COST = "shipping";
     private final static String STORE = "store";
     private final static String ADDRESS = "address";
-    private final static String VARIABLE_OPTION = "variable";
+    private final static String ACTION = "action";
+    private final static String COUPON = "coupon";
+    private final static String YES = "Si";
+    private final static String NO = "No";
+    private final static String COUPON_CODE = "code";
+    private final static String COUPON_USES = "uses";
     private int ordersCount = -1;
+    private int couponUsesCount = 2;
+    private final static String EMPTY_COUPONS_TEXT = "No se encontraron registros";
+    private final static String ERROR_MESSAGE = "Cupón inválido";
 
 
     @Test
@@ -118,82 +128,103 @@ public class WoloxTests extends BaseTest {
 
 
         CouponsPage couponsPage = couponModalComponent.clickCloseButton();
+        String couponCode = couponsPage.getRowTableCouponsComponent().getFieldText(COUPON_CODE);
+
+        Assertions.assertAll("ALl fields are correct",
+                () -> assertEquals("The coupon code is not the same ", couponCode, couponCodeValue),
+                () -> assertEquals("The number of times of coupon uses is not correct ", parseInt(couponsPage.getRowTableCouponsComponent()
+                        .getFieldText(COUPON_USES)), couponUsesCount)
+        );
+
         couponsPage.getTopBarComponent().homePage();
         rowTableComponent = tableBodyComponent.getRowTableComponent(2);
         makeAndCheckOrdersWithWelcomeCoupon(rowTableComponent, topBarComponent, couponCodeValue);
 
+        topBarComponent.couponsPage();
+        assertEquals("The number of times that the coupons was used is not correct", valueOf(couponUsesCount), couponsPage.getRowTableCouponsComponent()
+                .getFieldText(COUPON_USES));
+
+        couponsPage.getTopBarComponent().homePage();
         rowTableComponent = tableBodyComponent.getRowTableComponent(1);
         makeAndCheckOrdersWithWelcomeCoupon(rowTableComponent, topBarComponent, couponCodeValue);
 
+        topBarComponent.couponsPage();
+        assertEquals("The table still shows a valid coupon", couponsPage.getRowTableCouponsComponent().getEmptyCode().split("\n")[1], EMPTY_COUPONS_TEXT);
+
+        couponsPage.getTopBarComponent().homePage();
+        rowTableComponent = tableBodyComponent.getRowTableComponent(0);
+        makeAndCheckOrdersWithWelcomeCoupon(rowTableComponent, topBarComponent, couponCodeValue);
     }
 
 
     private void makeAndCheckOrders(RowTableComponent rowTableComponent, TopBarComponent topBarComponent) {
         ordersCount++;
 
-        //Duplicate Code * ///////////////////////////////////////////
-        List<String> listOfOffersFields = Arrays.asList(
-                rowTableComponent.getFieldText(DATE), rowTableComponent.getFieldText(DESCRIPTION), rowTableComponent.getFieldText(PRICE),
-                rowTableComponent.getFieldText(SHIPPING_COST), rowTableComponent.getFieldText(STORE), rowTableComponent.getFieldText(ADDRESS)
-        );
+        List<String> listOfOffersFields = getOffersPageFieldsTableList(rowTableComponent);
 
-        ConfirmOrderModal confirmOrderModal = rowTableComponent.clickRequestButton();
-
-        Assertions.assertAll("ALl fields are correct",
-                () -> assertEquals("The ", listOfOffersFields.get(0), confirmOrderModal.getDateValue()),
-                () -> assertEquals("The ", listOfOffersFields.get(1), confirmOrderModal.getTitleLabel()),
-                () -> assertEquals("The ", listOfOffersFields.get(2), confirmOrderModal.getPriceTitleValue()),
-                () -> assertEquals("The ", listOfOffersFields.get(3), confirmOrderModal.getShippingPriceValue()),
-                () -> assertEquals("The ", listOfOffersFields.get(4), confirmOrderModal.getStoreValue()),
-                () -> assertEquals("The ", listOfOffersFields.get(5), confirmOrderModal.getAddressValue())
-        );
-
-        //////////////////////////////////////////////////////
+        ConfirmOrderModal confirmOrderModal = fieldsModalComparision(rowTableComponent, listOfOffersFields);
 
         SucceedActionModal succeedActionModal = confirmOrderModal.clickConfirmOrderButton();
         succeedActionModal.clickOnCrossButton();
 
         OrdersPage ordersPage = topBarComponent.myOrdersPage();
-        checkOrdersList(listOfOffersFields, ordersPage);
+        checkOrdersListOffersPage(listOfOffersFields, ordersPage);
 
     }
 
-    private void checkOrdersList(List<String> lisOfFields, OrdersPage ordersPage) {
+    private void checkOrdersListOffersPage(List<String> lisOfFields, OrdersPage ordersPage) {
 
         RowTableComponent ordersRowTableComponent = ordersPage.getOrdersTableComponent().getTableBodyComponent().getRowTableComponent(ordersCount);
-
-        // Duplicate Code * ///////////////////////////////////
-        List<String> listOfOrderFields = Arrays.asList(
-                ordersRowTableComponent.getFieldText(DATE), ordersRowTableComponent.getFieldText(DESCRIPTION), ordersRowTableComponent.getFieldText(PRICE),
-                ordersRowTableComponent.getFieldText(SHIPPING_COST), ordersRowTableComponent.getFieldText(STORE), ordersRowTableComponent.getFieldText(ADDRESS)
-        );
-
-        Assertions.assertAll("ALl fields are correct",
-                () -> assertEquals("The ", listOfOrderFields.get(0), lisOfFields.get(0)),
-                () -> assertEquals("The ", listOfOrderFields.get(1), lisOfFields.get(1)),
-                () -> assertEquals("The ", listOfOrderFields.get(2), lisOfFields.get(2)),
-                () -> assertEquals("The ", listOfOrderFields.get(3), lisOfFields.get(3)),
-                () -> assertEquals("The ", listOfOrderFields.get(4), lisOfFields.get(4)),
-                () -> assertEquals("The ", listOfOrderFields.get(5), lisOfFields.get(5))
-        );
-
-        //////////////////////////////////////////////////////
+        fieldsCouponComparision(ordersRowTableComponent, lisOfFields, NO);
 
         ordersPage.getTopBarComponent().homePage();
-
     }
 
     private void makeAndCheckOrdersWithWelcomeCoupon(RowTableComponent rowTableComponent, TopBarComponent topBarComponent, String couponValue) {
         ordersCount++;
+        couponUsesCount--;
+        if (couponUsesCount < -1)
+            couponUsesCount = 2;
 
-        //Duplicate Code * ///////////////////////////////////////////
+        List<String> listOfOffersFields = getOffersPageFieldsTableList(rowTableComponent);
+
+        ConfirmOrderModal confirmOrderModal = fieldsModalComparision(rowTableComponent, listOfOffersFields);
+
+        confirmOrderModal.typeCouponValue(couponValue);
+
+        if (couponUsesCount == -1) {
+            confirmOrderModal.clickConfirmOrderButton();
+            assertEquals("The error message is not shown or is invalid", confirmOrderModal.getInvalidCouponErrorMessage(), ERROR_MESSAGE);
+            confirmOrderModal.clickCloseButton();
+        } else {
+            SucceedActionModal succeedActionModal = confirmOrderModal.clickConfirmOrderButton();
+            succeedActionModal.clickOnCrossButton();
+
+            OrdersPage ordersPage = topBarComponent.myOrdersPage();
+            checkOrdersListWithWelcomeCouponCouponsPage(listOfOffersFields, ordersPage);
+        }
+    }
+
+    private void checkOrdersListWithWelcomeCouponCouponsPage(List<String> lisOfFields, OrdersPage ordersPage) {
+        RowTableComponent ordersRowTableComponent = ordersPage.getOrdersTableComponent().getTableBodyComponent().getRowTableComponent(ordersCount);
+        List<String> listOfOrderFields = getOffersPageFieldsTableList(ordersRowTableComponent);
+
+        fieldsCouponComparision(ordersRowTableComponent, listOfOrderFields, YES);
+        ordersPage.getTopBarComponent().homePage();
+    }
+
+    private List<String> getOffersPageFieldsTableList(RowTableComponent rowTableComponent) {
         List<String> listOfOffersFields = Arrays.asList(
                 rowTableComponent.getFieldText(DATE), rowTableComponent.getFieldText(DESCRIPTION), rowTableComponent.getFieldText(PRICE),
-                rowTableComponent.getFieldText(SHIPPING_COST), rowTableComponent.getFieldText(STORE), rowTableComponent.getFieldText(ADDRESS)
+                rowTableComponent.getFieldText(SHIPPING_COST), rowTableComponent.getFieldText(STORE), rowTableComponent.getFieldText(ADDRESS),
+                rowTableComponent.getFieldText(COUPON)
         );
+        return listOfOffersFields;
+    }
+
+    private ConfirmOrderModal fieldsModalComparision(RowTableComponent rowTableComponent, List<String> listOfOffersFields) {
 
         ConfirmOrderModal confirmOrderModal = rowTableComponent.clickRequestButton();
-
         Assertions.assertAll("ALl fields are correct",
                 () -> assertEquals("The ", listOfOffersFields.get(0), confirmOrderModal.getDateValue()),
                 () -> assertEquals("The ", listOfOffersFields.get(1), confirmOrderModal.getTitleLabel()),
@@ -202,41 +233,20 @@ public class WoloxTests extends BaseTest {
                 () -> assertEquals("The ", listOfOffersFields.get(4), confirmOrderModal.getStoreValue()),
                 () -> assertEquals("The ", listOfOffersFields.get(5), confirmOrderModal.getAddressValue())
         );
-
-        //////////////////////////////////////////////////////
-
-        confirmOrderModal.typeCouponValue(couponValue);
-        SucceedActionModal succeedActionModal = confirmOrderModal.clickConfirmOrderButton();
-        succeedActionModal.clickOnCrossButton();
-
-        OrdersPage ordersPage = topBarComponent.myOrdersPage();
-        checkOrdersListWithCoupons(listOfOffersFields, ordersPage);
+        return confirmOrderModal;
     }
 
-    public void checkOrdersListWithCoupons(List<String> lisOfFields, OrdersPage ordersPage) {
+    private void fieldsCouponComparision(RowTableComponent rowTableComponent, List<String> listOfOffersFields, String withCoupon) {
 
-        RowTableComponent ordersRowTableComponent = ordersPage.getOrdersTableComponent().getTableBodyComponent().getRowTableComponent(ordersCount);
-
-        // Duplicate Code * ///////////////////////////////////
-        List<String> listOfOrderFields = Arrays.asList(
-                ordersRowTableComponent.getFieldText(DATE), ordersRowTableComponent.getFieldText(DESCRIPTION), ordersRowTableComponent.getFieldText(PRICE),
-                ordersRowTableComponent.getFieldText(SHIPPING_COST), ordersRowTableComponent.getFieldText(STORE), ordersRowTableComponent.getFieldText(ADDRESS),
-                ordersRowTableComponent.getFieldText(VARIABLE_OPTION)
-        );
-
+        List<String> lisOfFields = getOffersPageFieldsTableList(rowTableComponent);
         Assertions.assertAll("ALl fields are correct",
-                () -> assertEquals("The ", listOfOrderFields.get(0), lisOfFields.get(0)),
-                () -> assertEquals("The ", listOfOrderFields.get(1), lisOfFields.get(1)),
-                () -> assertEquals("The ", listOfOrderFields.get(2), lisOfFields.get(2)),
-                () -> assertEquals("The ", listOfOrderFields.get(3), lisOfFields.get(3)),
-                () -> assertEquals("The ", listOfOrderFields.get(4), lisOfFields.get(4)),
-                () -> assertEquals("The ", listOfOrderFields.get(5), lisOfFields.get(5)),
-                () -> assertEquals("The ", listOfOrderFields.get(6), "Si")
+                () -> assertEquals("The ", listOfOffersFields.get(0), lisOfFields.get(0)),
+                () -> assertEquals("The ", listOfOffersFields.get(1), lisOfFields.get(1)),
+                () -> assertEquals("The ", listOfOffersFields.get(2), lisOfFields.get(2)),
+                () -> assertEquals("The ", listOfOffersFields.get(3), lisOfFields.get(3)),
+                () -> assertEquals("The ", listOfOffersFields.get(4), lisOfFields.get(4)),
+                () -> assertEquals("The ", listOfOffersFields.get(5), lisOfFields.get(5)),
+                () -> assertEquals("The ", lisOfFields.get(6), withCoupon)
         );
-
-        //////////////////////////////////////////////////////
-
-        ordersPage.getTopBarComponent().homePage();
-
     }
 }

@@ -1,4 +1,4 @@
-package components;
+package components.orders;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -6,7 +6,7 @@ import web.BaseComponent;
 
 import java.util.List;
 
-import static components.RowTableCouponsComponent.RowElements.*;
+import static components.orders.RowTableCouponsComponent.RowElements.*;
 
 public class RowTableCouponsComponent extends BaseComponent {
 
@@ -16,6 +16,7 @@ public class RowTableCouponsComponent extends BaseComponent {
     @FindBy(id = "confirmation-modal")
     private WebElement modalOrderConfirmationContainer;
 
+    private WebElement container;
 
     public enum RowElements {
         CODE, DATE, DESCRIPTION, USES
@@ -24,6 +25,7 @@ public class RowTableCouponsComponent extends BaseComponent {
 
     public RowTableCouponsComponent(WebElement container) {
         super(container);
+        this.container = container;
     }
 
     public String getFieldText(String field) {
@@ -40,5 +42,9 @@ public class RowTableCouponsComponent extends BaseComponent {
                 return fieldsList.get(USES.ordinal()).getText();
         }
         return "";
+    }
+
+    public String getEmptyCode() {
+        return container.getText();
     }
 }

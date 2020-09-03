@@ -1,6 +1,5 @@
 package components.commons;
 
-import components.TableBodyComponent;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import web.BaseComponent;
