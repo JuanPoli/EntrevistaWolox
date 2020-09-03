@@ -53,7 +53,6 @@ public class WoloxTests extends BaseTest {
     private final static String EMPTY_COUPONS_TEXT = "No se encontraron registros";
     private final static String ERROR_MESSAGE = "Cupón inválido";
 
-
     @Test
     public void woloxInterviewPersonalInformationTest() {
         HomePage homePage = login();
@@ -225,13 +224,13 @@ public class WoloxTests extends BaseTest {
     private ConfirmOrderModal fieldsModalComparision(RowTableComponent rowTableComponent, List<String> listOfOffersFields) {
 
         ConfirmOrderModal confirmOrderModal = rowTableComponent.clickRequestButton();
-        Assertions.assertAll("ALl fields are correct",
-                () -> assertEquals("The ", listOfOffersFields.get(0), confirmOrderModal.getDateValue()),
-                () -> assertEquals("The ", listOfOffersFields.get(1), confirmOrderModal.getTitleLabel()),
-                () -> assertEquals("The ", listOfOffersFields.get(2), confirmOrderModal.getPriceTitleValue()),
-                () -> assertEquals("The ", listOfOffersFields.get(3), confirmOrderModal.getShippingPriceValue()),
-                () -> assertEquals("The ", listOfOffersFields.get(4), confirmOrderModal.getStoreValue()),
-                () -> assertEquals("The ", listOfOffersFields.get(5), confirmOrderModal.getAddressValue())
+        Assertions.assertAll("Some field(s) failed",
+                () -> assertEquals("The table date value is not the same as the confirmationModal", listOfOffersFields.get(0), confirmOrderModal.getDateValue()),
+                () -> assertEquals("The table title label is not the same as the confirmationModal", listOfOffersFields.get(1), confirmOrderModal.getTitleLabel()),
+                () -> assertEquals("The table price title is not the same as the confirmationModal", listOfOffersFields.get(2), confirmOrderModal.getPriceTitleValue()),
+                () -> assertEquals("The table shipping price value is not the same as the confirmationModal", listOfOffersFields.get(3), confirmOrderModal.getShippingPriceValue()),
+                () -> assertEquals("The store value is not the same as the confirmationModal", listOfOffersFields.get(4), confirmOrderModal.getStoreValue()),
+                () -> assertEquals("The address value is not the same as the confirmationModal", listOfOffersFields.get(5), confirmOrderModal.getAddressValue())
         );
         return confirmOrderModal;
     }
@@ -239,14 +238,14 @@ public class WoloxTests extends BaseTest {
     private void fieldsCouponComparision(RowTableComponent rowTableComponent, List<String> listOfOffersFields, String withCoupon) {
 
         List<String> lisOfFields = getOffersPageFieldsTableList(rowTableComponent);
-        Assertions.assertAll("ALl fields are correct",
-                () -> assertEquals("The ", listOfOffersFields.get(0), lisOfFields.get(0)),
-                () -> assertEquals("The ", listOfOffersFields.get(1), lisOfFields.get(1)),
-                () -> assertEquals("The ", listOfOffersFields.get(2), lisOfFields.get(2)),
-                () -> assertEquals("The ", listOfOffersFields.get(3), lisOfFields.get(3)),
-                () -> assertEquals("The ", listOfOffersFields.get(4), lisOfFields.get(4)),
-                () -> assertEquals("The ", listOfOffersFields.get(5), lisOfFields.get(5)),
-                () -> assertEquals("The ", lisOfFields.get(6), withCoupon)
+        Assertions.assertAll("Some field(s) failed",
+                () -> assertEquals("The table date value is not the same as the coupons page table", listOfOffersFields.get(0), lisOfFields.get(0)),
+                () -> assertEquals("The table date value is not the same as the coupons page table", listOfOffersFields.get(1), lisOfFields.get(1)),
+                () -> assertEquals("The table date value is not the same as the coupons page table", listOfOffersFields.get(2), lisOfFields.get(2)),
+                () -> assertEquals("The table date value is not the same as the coupons page table", listOfOffersFields.get(3), lisOfFields.get(3)),
+                () -> assertEquals("The table date value is not the same as the coupons page table", listOfOffersFields.get(4), lisOfFields.get(4)),
+                () -> assertEquals("The table date value is not the same as the coupons page table", listOfOffersFields.get(5), lisOfFields.get(5)),
+                () -> assertEquals("The coupon usage information is not the correct one", lisOfFields.get(6), withCoupon)
         );
     }
 }
